@@ -4,8 +4,11 @@ import sys
 import nltk
 import re
 
+text = open(sys.argv[1],'r').read()
+
 syllables = dict()
-invalid_sentence = re.compile(r'[.?!]+\s*.')
+force_valid = re.compile(r'[.?!"\']$')
+invalid_sentence = re.compile(r'[.?!;:]+\s*.')
 
 for line in file('cmudict.0.7a'):
     (word, sp, phonemes) = line.partition(' ')
@@ -43,7 +46,7 @@ class Syllablizer:
         if syllable_count > n:
             raise Nope
         line = ' '.join(self.words[si:self.index])
-        if invalid_sentence.search(line):
+        if invalid_sentence.search(line) and not force_valid.search(line):
             raise Nope
         self.lines.append(line)
     
@@ -64,9 +67,8 @@ class Syllablizer:
         
 
 sentence_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-pandp = open('pandp12.txt','r').read()
 
-for line in sentence_tokenizer.tokenize(pandp):
+for line in sentence_tokenizer.tokenize(text):
     syl = Syllablizer(line)
     try:
         syl.find_haiku()
