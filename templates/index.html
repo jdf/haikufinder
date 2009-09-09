@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+	<title>Haiku Finder</title>
+	<link rel="stylesheet" type="text/css" href="/static/haiku.css" />
+	<!--
+		By Jonathan Feinberg <jdf@us.ibm.com> 
+	 -->
+</head>
+<body>
+	<div id="main">
+		<h1>Haiku Finder</h1>
+		% if haikus:
+			<div id='results'>
+				<h3>Your Found Haikus</h3>
+				% for haiku in haikus:
+					<div class="haiku">
+						${haiku[0]}<br>
+						<span class="secondline">${haiku[1]}</span><br>
+						${haiku[2]}
+					</div>
+				% endfor
+			</div>
+		% endif
+        % if nonefound:
+                <div id='results'>
+		                <h3>Mu</h3>
+                        <div class="haiku">
+                                There were no haikus<br>
+                                <span class="secondline">that I was able to find</span><br>
+                                in your pasted text.
+                        </div>  
+                </div>
+        % endif
+		<p>
+			This thingy looks for sentences or groups of sentences whose words
+			fall in groups of 5, 7, and 5 syllables. It follows a few simple
+			rules to discard obviously awkward breaks, although it still lets
+			some through. Paste in the text of a book from the Gutenberg project,
+			a political speech or deposition, or some dry legal document to find
+			the soul within.
+		</p>
+		<form action="/" method="POST">Enter some text here and <input type="submit" value="Find Haikus"/><br>
+			<textarea rows="20" cols="80" name="text"></textarea>
+		</form>
+		
+		<div id="credits">
+		<a href="mailto:jdf@us.ibm.com">Jonathan Feinberg</a>
+		</div>
+	</div>
+</body>
+</html>
