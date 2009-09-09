@@ -4,14 +4,17 @@ from mako.template import Template
 import cherrypy
 import cStringIO
 import sys
+import os.path
+
+thisdir = os.path.dirname(__file__)
 
 class HaikuSite:
     def __init__(self):
-        with open("templates/index.html", "r") as t:
+        with open(os.path.join(thisdir, "templates/index.html"), "r") as t:
             self.template = Template(t.read())
             
     @cherrypy.expose
-    def index(self, text=None):
+    def haikufinder(self, text=None):
         if text:
             haikus = HaikuFinder(text).find_haikus()
             if haikus:
@@ -22,5 +25,6 @@ class HaikuSite:
 
 if __name__ == '__main__':
     import os.path
-    thisdir = os.path.dirname(__file__)
+    cherrypy.config.update({'environment': 'production',
+                            'log.error_file': 'haiku.log'})
     cherrypy.quickstart(HaikuSite(), config=os.path.join(thisdir, 'haiku.conf'))
