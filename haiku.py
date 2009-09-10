@@ -89,7 +89,11 @@ class HaikuFinder:
 
 if __name__ == '__main__':
     import sys
-    with open(sys.argv[1], "r") as text:
+    try:
+        t = sys.argv[1]
+    except:
+        t = 'debug.txt'
+    with open(t, "r") as text:
         for haiku in HaikuFinder(text.read()).find_haikus():
             print haiku[0]
             print "    %s"%haiku[1]

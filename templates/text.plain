@@ -1,0 +1,11 @@
+% if haikus:
+	% for haiku in haikus:
+${haiku[0]}
+    ${haiku[1]}
+${haiku[2]}
+
+	% endfor
+% endif
+% if nonefound:
+Mu
+% endif
