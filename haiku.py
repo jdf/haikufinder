@@ -7,7 +7,16 @@ import cPickle as pickle
 import gzip
 import os.path
 
-bad_end = re.compile(r'[.?!;:]+\s*.+?[^.?!"\']$|\b(?:a|the|an|he|she|I|we|they|as|of|and|with|my|your|to)$', re.IGNORECASE)
+half_sentence = re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$')
+one_word_start = re.compile(r'^[a-z]\w+[\'"]?[.?!;:]')
+one_word_end = re.compile(r'[.?!;:]+\s+\w+(\'\w+)?$')
+bad_end = re.compile(r'''
+    \b        # any of the following words
+    (?:
+        a|the|an|he|she|I|we|they|as|of|and|with|my|your|to|so
+    )
+    $        # at the end
+    ''', re.IGNORECASE | re.VERBOSE)
 awkward_in_front = re.compile(r'^(?:him|me|us|them|of|you is)\b', re.IGNORECASE)
 
 with open(os.path.join(os.path.dirname(__file__),'cmudict.pickle'),'rb') as p:
@@ -48,7 +57,13 @@ class LineSyllablizer:
         line = ' '.join(self.words[si:self.index])
         if awkward_in_front.search(line):
             raise Nope
+        if one_word_start.search(line):
+            raise Nope
+        if one_word_end.search(line):
+            raise Nope
         if bad_end.search(line):
+            raise Nope
+        if half_sentence.search(line):
             raise Nope
         self.lines.append(line)
     
