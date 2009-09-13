@@ -66,7 +66,7 @@ single_line_filters = (
 awkward_in_front_without_punct_before = re.compile(r'^(?:its?|an?|they)\b')
 
 # load the syllable-count dictionary
-with open(os.path.join(os.path.dirname(__file__), 'cmudict.pickle'), 'rb') as p:
+with open(os.path.join(os.path.dirname(__file__), 'cmudict.pickle2'), 'rb') as p:
     syllables = pickle.load(p)
 
 # Use the NLTK to determine sentence boundaries.

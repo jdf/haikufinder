@@ -34,10 +34,12 @@ from nltk.corpus import cmudict
 import re
 syllables = dict()
 numeral = re.compile(r'\d')
-parenned = re.compile(r'\(\d+\)')
-for (word, variations) in cmudict.entries():
-    count = min([len([x for x in phonemes if numeral.search(x)]) for phonemes in variations])
-    syllables[word.upper()] = count
+for (word, phonemes) in cmudict.entries():
+    word = word.upper()
+    count = len([x for x in list(''.join(phonemes)) if x >= '0' and x <= '9'])
+    if syllables.has_key(word):
+        count = min(count, syllables[word])
+    syllables[word] = count
 output = open('cmudict.pickle2', 'wb')
 pickle.dump(syllables, output, pickle.HIGHEST_PROTOCOL)
 output.close()
