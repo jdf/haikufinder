@@ -1,6 +1,3 @@
-#! /bin/env python
-
-#
 # A hack to find "haikus" in English text. For the purposes of this program
 # a "haiku" is one or more complete sentences that, together, can be broken
 # into groups of 5, 7, and 5 syllables. Each canididate haiku line, and then
@@ -66,7 +63,7 @@ single_line_filters = (
 awkward_in_front_without_punct_before = re.compile(r'^(?:its?|an?|they)\b')
 
 # load the syllable-count dictionary
-with open(os.path.join(os.path.dirname(__file__), 'cmudict.pickle'), 'rb') as p:
+with open(os.path.join(os.path.dirname(__file__), 'cmudict/cmudict.pickle'), 'rb') as p:
     syllables = pickle.load(p)
 
 # Use the NLTK to determine sentence boundaries.
