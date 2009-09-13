@@ -66,7 +66,7 @@ single_line_filters = (
 awkward_in_front_without_punct_before = re.compile(r'^(?:its?|an?|they)\b')
 
 # load the syllable-count dictionary
-with open(os.path.join(os.path.dirname(__file__), 'cmudict.pickle2'), 'rb') as p:
+with open(os.path.join(os.path.dirname(__file__), 'cmudict.pickle'), 'rb') as p:
     syllables = pickle.load(p)
 
 # Use the NLTK to determine sentence boundaries.
@@ -148,18 +148,3 @@ class HaikuFinder:
                     offset += 1
             line_index += 1
         return haikus
-
-if __name__ == '__main__':
-    import sys
-    try:
-        t = sys.argv[1]
-    except:
-        t = 'debug.txt'
-    with open(t, "r") as text:
-        for haiku in HaikuFinder(text.read()).find_haikus():
-            print haiku[0]
-            print "    %s" % haiku[1]
-            print haiku[2]
-            print
-
-
