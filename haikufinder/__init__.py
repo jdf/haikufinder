@@ -149,3 +149,7 @@ class HaikuFinder:
                     offset += 1
             line_index += 1
         return haikus
+    
+    @classmethod
+    def add_word(cls, word, syllable_count):
+        syllables[word.upper()] = syllable_count

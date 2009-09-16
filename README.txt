@@ -27,3 +27,15 @@ Example usage:
 	    print "    %s" % haiku[1]
 	    print haiku[2]
 	    print
+
+If you find that the HaikuFinder doesn't seem to recognize some word
+you're using, or is counting its syllables incorrectly, you can say
+
+    HaikuFinder.add_word('shmeggegge', 3)
+    HaikuFinder.add_word('kvetch', 1)
+    haikus = HaikuFinder('''
+    	For this I should stay? To hear some shmeggegge kvetch about his lawsuit?
+    	''').find_haikus()
+
+If you like, you can fork the project, modify the custom.dict, and submit a pull
+request. I'll accept all useful dictionary additions.
