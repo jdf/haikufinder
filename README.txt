@@ -1,4 +1,4 @@
-Installer: http://MrFeinberg.com/haikufinder-1.0.zip
+Installer: http://MrFeinberg.com/haikufinder-1.1.zip
 
 * 
 *	REQUIRES NLTK, THE NATURAL LANGUAGE TOOLKIT
