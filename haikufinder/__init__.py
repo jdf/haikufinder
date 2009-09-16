@@ -67,7 +67,7 @@ with open(os.path.join(os.path.dirname(__file__), 'cmudict/cmudict.pickle'), 'rb
     syllables = pickle.load(p)
 with open(os.path.join(os.path.dirname(__file__), 'cmudict/custom.dict'), 'r') as p:
     for line in p.xreadlines():
-        (word, count) = line.split(' ')
+        (word, count) = line.split()
         syllables[word] = int(count)
 
 # Use the NLTK to determine sentence boundaries.
@@ -85,7 +85,7 @@ class LineSyllablizer:
         self.index = 0
         self.lines = []
         
-    def clean(self, word, wp=re.compile(r'^[^a-z]*([a-z]+(?:\'[a-z]+)?)[^a-z]*$', re.IGNORECASE)):
+    def clean(self, word, wp=re.compile(r'^[^a-z]*([a-z\+]+(?:\'[a-z]+)?)[^a-z]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
             return None
