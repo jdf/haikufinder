@@ -1,7 +1,8 @@
 README.txt
 setup.py
-haikufinder\__init__.py
-haikufinder\cmudict\PickleCMUDict.py
-haikufinder\cmudict\cmudict.pickle
-scripts\findhaikus
+haikufinder/__init__.py
+haikufinder/cmudict/PickleCMUDict.py
+haikufinder/cmudict/cmudict.pickle
+haikufinder/cmudict/custom.dict
+scripts/findhaikus
 license.txt

@@ -53,7 +53,7 @@ single_line_filters = (
                                 we|they|as|of|and|
                                 with|my|your|to|so|
                                 which|that|it|for|
-                                have|in|at
+                                have|in|at|this
                             )
                             $
                             ''', re.IGNORECASE | re.VERBOSE),
@@ -65,6 +65,10 @@ awkward_in_front_without_punct_before = re.compile(r'^(?:its?|an?|they)\b')
 # load the syllable-count dictionary
 with open(os.path.join(os.path.dirname(__file__), 'cmudict/cmudict.pickle'), 'rb') as p:
     syllables = pickle.load(p)
+with open(os.path.join(os.path.dirname(__file__), 'cmudict/custom.dict'), 'r') as p:
+    for line in p.xreadlines():
+        (word, count) = line.split(' ')
+        syllables[word] = int(count)
 
 # Use the NLTK to determine sentence boundaries.
 sentence_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')

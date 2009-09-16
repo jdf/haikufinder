@@ -1,4 +1,5 @@
-#! /bin/env python
+#! /usr/bin/env python
+
 #
 # License:
 #
@@ -38,5 +39,3 @@ for haiku in HaikuFinder(text).find_haikus():
     print "    %s" % haiku[1]
     print haiku[2]
     print
-
-
