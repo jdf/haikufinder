@@ -53,7 +53,10 @@ single_line_filters = (
                                 we|they|as|of|and|
                                 with|my|your|to|so|
                                 which|that|it|for|
-                                have|in|at|this
+                                have|in|at|this|his|her|
+                                you|\w+'s|than|they're|
+                                we're|s?he's|i'm|you're|
+                                it'?s
                             )
                             $
                             ''', re.IGNORECASE | re.VERBOSE),
@@ -61,6 +64,7 @@ single_line_filters = (
                        )
 
 awkward_in_front_without_punct_before = re.compile(r'^(?:its?|an?|they)\b')
+first_word_comma = re.compile(r'^\s*\w+,')
 
 # load the syllable-count dictionary
 with open(os.path.join(os.path.dirname(__file__), 'cmudict/cmudict.pickle'), 'rb') as p:
@@ -80,10 +84,11 @@ class TooShort(Exception):
     pass
 
 class LineSyllablizer:
-    def __init__(self, line):
+    def __init__(self, line, unknown_word_handler):
         self.words = line.split()
         self.index = 0
         self.lines = []
+        self.unknown_word_handler = unknown_word_handler
         
     def clean(self, word, wp=re.compile(r'^[^a-z]*([a-z\+]+(?:\'[a-z]+)?)[^a-z]*$', re.IGNORECASE)):
         m = wp.match(word)
@@ -96,9 +101,12 @@ class LineSyllablizer:
         syllable_count = 0
         try:
             while syllable_count < n:
-                syllable_count += syllables[self.clean(self.words[self.index])]
+                word = self.clean(self.words[self.index])
+                syllable_count += syllables[word]
                 self.index += 1
         except KeyError:
+            if word:
+                self.unknown_word_handler(word)
             raise Nope
         except IndexError:
             raise TooShort
@@ -124,12 +132,15 @@ class LineSyllablizer:
         self.seek_eol()
         if self.bad_split(1) or self.bad_split(2):
             raise Nope
+        if first_word_comma.search(self.lines[1]) or first_word_comma.search(self.lines[2]):
+            raise Nope
         return self.lines
         
 
 class HaikuFinder:
-    def __init__(self, text):
+    def __init__(self, text, unknown_word_handler=None):
         self.lines = sentence_tokenizer.tokenize(text)
+        self.unknown_word_handler = unknown_word_handler
         
     def find_haikus(self):
         haikus = []
@@ -141,7 +152,7 @@ class HaikuFinder:
             while line_index + offset < line_count:
                 line = "%s %s" % (line, self.lines[line_index + offset])
                 try:
-                    haikus.append(LineSyllablizer(line).find_haiku())
+                    haikus.append(LineSyllablizer(line, self.unknown_word_handler).find_haiku())
                     break
                 except Nope:
                     break
