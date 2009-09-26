@@ -56,7 +56,7 @@ single_line_filters = (
                                 have|in|at|this|his|her|
                                 you|\w+'s|than|they're|
                                 we're|s?he's|i'm|you're|
-                                its
+                                its|if
                             )
                             $
                             ''', re.IGNORECASE | re.VERBOSE),
