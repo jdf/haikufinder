@@ -42,34 +42,31 @@ import cPickle as pickle
 import gzip
 import os.path
 
-single_line_filters = (
+def file(relpath):
+    return os.path.join(os.path.dirname(__file__), relpath)
+
+def read_alternates(which):
+    with open(file('data/awkward_%s'%which), 'r') as baddies:
+        return '|'.join([e.strip() for e in baddies.readlines() if len(e.strip()) > 0])
+    
+single_line_filters = [
                        re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$'),
                        re.compile(r'^[a-z]\w+[\'"]?[.?!;:]'),
                        re.compile(r'[.?!;:]+\s+\w+(\'\w+)?$'),
-                       re.compile(r'''
-                            \b
-                            (?:
-                                a|the|an|he|she|I|
-                                we|they|as|of|and|
-                                with|my|your|to|so|
-                                which|that|it|for|
-                                have|in|at|this|his|her|
-                                you|\w+'s|than|they're|
-                                we're|s?he's|i'm|you're|
-                                its|if
-                            )
-                            $
-                            ''', re.IGNORECASE | re.VERBOSE),
-                       re.compile(r'^(?:him|her|me|us|them|of|you is)\b', re.IGNORECASE),
-                       )
-
-awkward_in_front_without_punct_before = re.compile(r'^(?:its?|an?|they)\b')
+                       ]
+single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
+single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends')))
+   
 first_word_comma = re.compile(r'^\s*\w+,')
 
+with open(file('data/awkward_breaks'), 'r') as breaks:
+    alts = '|'.join([r'\b%s\b' % ('\n'.join(e.strip().split())) for e in breaks.readlines() if len(e.strip()) > 0])
+    break_filter = re.compile(alts)
+
 # load the syllable-count dictionary
-with open(os.path.join(os.path.dirname(__file__), 'cmudict/cmudict.pickle'), 'rb') as p:
+with open(file('cmudict/cmudict.pickle'), 'rb') as p:
     syllables = pickle.load(p)
-with open(os.path.join(os.path.dirname(__file__), 'cmudict/custom.dict'), 'r') as p:
+with open(file('cmudict/custom.dict'), 'r') as p:
     for line in p.xreadlines():
         (word, count) = line.split()
         syllables[word] = int(count)
@@ -105,7 +102,7 @@ class LineSyllablizer:
                 syllable_count += syllables[word]
                 self.index += 1
         except KeyError:
-            if word:
+            if word and self.unknown_word_handler:
                 self.unknown_word_handler(word)
             raise Nope
         except IndexError:
@@ -130,9 +127,9 @@ class LineSyllablizer:
         self.seek(7)
         self.seek(5)
         self.seek_eol()
-        if self.bad_split(1) or self.bad_split(2):
-            raise Nope
         if first_word_comma.search(self.lines[1]) or first_word_comma.search(self.lines[2]):
+            raise Nope
+        if break_filter.search('\n'.join(self.lines)):
             raise Nope
         return self.lines
         
