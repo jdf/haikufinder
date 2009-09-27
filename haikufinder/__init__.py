@@ -51,8 +51,8 @@ def read_alternates(which):
     
 single_line_filters = [
                        re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$'),
-                       re.compile(r'^[a-z]\w+[\'"]?[.?!;:]'),
-                       re.compile(r'[.?!;:]+\s+\w+(\'\w+)?$'),
+                       re.compile(r'^[a-z]+(?:\'[a-z]+)?[\'".?!;:]'),
+                       re.compile(r'[.?!;:]+\s+[a-z]+(?:\'[a-z]+)?$'),
                        ]
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends')))
