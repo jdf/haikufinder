@@ -2,7 +2,7 @@ can you
 run over
 there'd be
 away from
-[a-z]+(?:'[a-z]+)? (?:its?|an?|they|my|his|her|your|and|for)
+[a-z]+(?:'[a-z]+)? (?:its?|an?|they|my|his|her|your|and|for|you|me|him|her|them|us)
 go (?:where|to|at|in)
 Mrs?.? [A-Z][a-z]*(?:'[a-z]+)?
 pass away
