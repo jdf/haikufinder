@@ -21,3 +21,5 @@ to\s[A-Za-z]+(?:'[a-z]+)? (my|his|your|her|its|their)
 way to
 time soon
 any more
+(?:zone|throw|freak|take|punch) out
+hey hey
