@@ -50,8 +50,8 @@ def read_alternates(which):
         return '|'.join([e.strip() for e in baddies.readlines() if len(e.strip()) > 0])
     
 single_line_filters = [
-                       re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$'),
-                       re.compile(r'^[a-z]+(?:\'[a-z]+)?[\'".?!;:]\s'),
+                       re.compile(r'^[a-zA-Z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$'),
+                       re.compile(r'^[a-zA-Z]+(?:\'[a-zA-Z]+)?[\'".?!;:]\s'),
                        re.compile(r'[.?!;:]+\s+[\'"]?[A-Za-z]+(?:\'[a-z]+)?$'),
                        re.compile(r'\d\d'),
                        ]
