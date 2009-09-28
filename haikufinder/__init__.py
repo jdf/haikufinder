@@ -51,12 +51,12 @@ def read_alternates(which):
     
 single_line_filters = [
                        re.compile(r'^[a-zA-Z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$'),
-                       re.compile(r'^[a-zA-Z]+(?:\'[a-zA-Z]+)?[\'".?!;:]\s'),
+                       re.compile(r'.^[a-zA-Z]+(?:\'[a-zA-Z]+)?[\'".?!;:]\s'),
                        re.compile(r'[.?!;:]+\s+[\'"]?[A-Za-z]+(?:\'[a-z]+)?$'),
                        re.compile(r'\d\d'),
                        ]
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
-single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends')))
+single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
    
 first_word_comma = re.compile(r'^\s*\w+,')
 
