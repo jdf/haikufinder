@@ -28,4 +28,4 @@ how many
 "\S+ \S+"
 (?:will|won'?t) be
 (?:we'?|ha)ve (?:done|had|[a-z]+e[nd])
-. [a-z]+(?:'[a-z]+)?['".?!;:]+.
+. [a-z]+(?:'[a-z]+)?[".?!;:]+.
