@@ -24,3 +24,7 @@ any more
 (?:zone|throw|freak|take|punch) out
 hey hey
 may be
+how many
+"\S+ \S+"
+(?:will|won'?t) be
+(?:we'?|ha)ve (?:done|had|[a-z]+e[nd])

@@ -62,7 +62,7 @@ first_word_comma = re.compile(r'^\s*\w+,')
 
 with open(file('data/awkward_breaks'), 'r') as breaks:
     alts = '|'.join([r'\b%s\b' % ('\n'.join(e.strip().split())) for e in breaks.readlines() if len(e.strip()) > 0])
-    break_filter = re.compile(alts)
+    break_filter = re.compile(alts, re.IGNORECASE)
 
 # load the syllable-count dictionary
 with open(file('cmudict/cmudict.pickle'), 'rb') as p:
