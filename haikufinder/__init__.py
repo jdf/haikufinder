@@ -51,7 +51,6 @@ def read_alternates(which):
     
 single_line_filters = [
                        re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$', re.IGNORECASE),
-                       re.compile(r'\n[a-z]+(?:\'[a-z]+)?[\'".?!;:]\s', re.IGNORECASE),
                        re.compile(r'[.?!;:]+\s+[\'"]?[A-Za-z]+(?:\'[a-z]+)?$'),
                        re.compile(r'\d\d'),
                        ]
