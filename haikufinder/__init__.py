@@ -60,7 +60,10 @@ single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.I
 first_word_comma = re.compile(r'^\s*\w+,')
 
 with open(file('data/awkward_breaks'), 'r') as breaks:
-    alts = '|'.join([r'\b%s\b' % ('\n'.join(e.strip().split())) for e in breaks.readlines() if len(e.strip()) > 0])
+    alts = '|'.join([r'\b%s\b' % ('\n'.join(e.strip().split())) for e in breaks.readlines() if len(e.strip()) > 0]
+                    + ['[^\'".?!;:,]\n[a-z]+(?:\'[a-z]+)?[".?!;:]+.',
+                       '"\S+\n\S+"',
+                       ])
     break_filter = re.compile(alts, re.IGNORECASE)
 
 # load the syllable-count dictionary

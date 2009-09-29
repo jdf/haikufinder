@@ -25,7 +25,7 @@ any more
 hey hey
 may be
 how many
-"\S+ \S+"
 (?:will|won'?t) be
 (?:we'?|ha)ve (?:done|had|[a-z]+e[nd])
-[^'".?!;:,] [a-z]+(?:'[a-z]+)?[".?!;:]+.
+dream about
+get back
