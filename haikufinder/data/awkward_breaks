@@ -27,6 +27,7 @@ may be
 how many
 (?:will|won'?t) be
 (?:we'?|ha)ve (?:done|had|[a-z]+e[nd])
+has (?:done|had|[a-z]+e[nd])
 dream about
 get back
 going on
@@ -36,3 +37,7 @@ dance party
 (?:up|down|near|around) there
 too \w+
 get (?:out|up|through|on|at|to|with)
+behind [io]n
+up on
+(?:[io]n|at|toward[s]) the
+(?:will|is|have|did|do|are) not
