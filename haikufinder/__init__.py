@@ -56,6 +56,8 @@ single_line_filters = [
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
    
+has_digit = re.compile(r'\d')
+
 first_word_comma = re.compile(r'^\s*\w+,')
 
 with open(file('data/awkward_breaks'), 'r') as breaks:
@@ -76,6 +78,23 @@ with open(file('cmudict/custom.dict'), 'r') as p:
 # Use the NLTK to determine sentence boundaries.
 sentence_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 
+number_syllables = (
+                #   0  1  2  3  4  5  6  7  8  9
+                    2, 1, 1, 1, 1, 1, 1, 2, 1, 1,
+                    1, 3, 1, 2, 2, 2, 2, 3, 2, 2,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    )
+ordinal = re.compile(r'^(\d\d?)(?:rd|th|st)$', re.IGNORECASE)
+time = re.compile(r'^(\d\d?)[ap]m$', re.IGNORECASE)
+too_many_digits = re.compile('\d\d\d')
+
 class Nope(Exception):
     pass
 
@@ -83,17 +102,51 @@ class TooShort(Exception):
     pass
 
 class LineSyllablizer:
-    def __init__(self, line, unknown_word_handler):
+    def __init__(self, line, unknown_word_handler=None):
         self.words = line.split()
         self.index = 0
         self.lines = []
         self.unknown_word_handler = unknown_word_handler
+    
+    def _count_syllables(self, word, splitter=re.compile(r'(?<=\D)(?=\d)|(?<=\d)(?=\D)')):
+        "Raises KeyError, Nope"
+        if not has_digit.search(word):
+            return syllables[word]
+        if too_many_digits.search(word):
+            raise Nope
+        m = time.match(word)
+        if m:
+            return 2 + number_syllables[int(m.group(1))]
+        m = ordinal.match(word)
+        if m:
+            return number_syllables[int(m.group(1))]
+        count = 0
+        start = 0
+        for m in splitter.finditer(word):
+            boundary = m.start()
+            count += syllables[word[start:boundary]]
+            start = boundary
+        count += syllables[word[start:]]
         
     def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
             return None
         return m.group(1).upper()
+
+    def count_syllables(self):
+        si = 0
+        syllable_count = 0
+        try:
+            for word in self.words:
+                syllable_count += self._count_syllables(self.clean(word))
+        except KeyError:
+            print "I don't know '%s'"%word
+            return -1
+        except Nope:
+            print "I can't do '%s'"%word
+            return -1
+        return syllable_count
     
     def seek(self, n):
         si = self.index
@@ -101,8 +154,7 @@ class LineSyllablizer:
         try:
             while syllable_count < n:
                 word = self.clean(self.words[self.index])
-                
-                syllable_count += syllables[word]
+                syllable_count += self._count_syllables(word)
                 self.index += 1
         except KeyError:
             if word and self.unknown_word_handler:
@@ -167,3 +219,6 @@ class HaikuFinder:
 
 def find_haikus(text,  unknown_word_handler=None):
     return HaikuFinder(text, unknown_word_handler).find_haikus()
+
+def count_syllables(text):
+    return LineSyllablizer(text).count_syllables()
