@@ -52,8 +52,6 @@ def read_alternates(which):
 single_line_filters = [
                        re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$', re.IGNORECASE),
                        re.compile(r'[.?!;:]+\s+[\'"]?[A-Za-z]+(?:\'[a-z]+)?$'),
-                       re.compile(r'\d\d'),
-                       re.compile(r'\d(?!(th|st|rd)\b)[a-z]', re.IGNORECASE),
                        ]
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
@@ -91,7 +89,7 @@ class LineSyllablizer:
         self.lines = []
         self.unknown_word_handler = unknown_word_handler
         
-    def clean(self, word, wp=re.compile(r'^[^a-z]*([a-z\+]+(?:\'[a-z]+)?)[^a-z]*$', re.IGNORECASE)):
+    def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
             return None
