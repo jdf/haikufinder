@@ -162,6 +162,9 @@ class LineSyllablizer:
                 word = self.clean(self.words[self.index])
                 syllable_count += self._count_syllables(word)
                 self.index += 1
+        except TypeError:
+            print >> sys.stderr, "%s caused TypeError"%word
+            raise Nope
         except KeyError:
             if word and self.unknown_word_handler:
                 self.unknown_word_handler(word)
