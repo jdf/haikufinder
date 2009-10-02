@@ -41,6 +41,7 @@ import re
 import cPickle as pickle
 import gzip
 import os.path
+import sys
 
 def file(relpath):
     return os.path.join(os.path.dirname(__file__), relpath)
