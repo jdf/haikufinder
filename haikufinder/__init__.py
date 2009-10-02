@@ -239,4 +239,3 @@ def find_haikus(text,  unknown_word_handler=None):
 def count_syllables(text):
     return LineSyllablizer(text).count_syllables()
 
-count_syllables("@roxy_babyy jump on it with me")
