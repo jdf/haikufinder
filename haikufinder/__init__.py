@@ -122,6 +122,9 @@ class LineSyllablizer:
         if '-' in word:
             return sum(self._count_syllables(w) for w in word.split('-'))
         
+        if '_' in word:
+            return sum(self._count_syllables(w) for w in word.split('_'))
+
         if not has_digit.search(word):
             return syllables[word]
         if too_many_digits.search(word):
@@ -141,7 +144,7 @@ class LineSyllablizer:
         count += self._count_chunk_syllables(word[start:])
         return count
     
-    def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([-0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
+    def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([-_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
             return None
@@ -235,3 +238,5 @@ def find_haikus(text,  unknown_word_handler=None):
 
 def count_syllables(text):
     return LineSyllablizer(text).count_syllables()
+
+count_syllables("@roxy_babyy jump on it with me")
