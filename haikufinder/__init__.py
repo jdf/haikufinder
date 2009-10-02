@@ -163,9 +163,6 @@ class LineSyllablizer:
                 word = self.clean(self.words[self.index])
                 syllable_count += self._count_syllables(word)
                 self.index += 1
-        except TypeError:
-            print >> sys.stderr, "%s caused TypeError"%word
-            raise Nope
         except KeyError:
             if word and self.unknown_word_handler:
                 self.unknown_word_handler(word)
@@ -216,6 +213,8 @@ class HaikuFinder:
                 try:
                     haikus.append(LineSyllablizer(line, self.unknown_word_handler).find_haiku())
                     break
+                except Nope:
+                    print "Type error from:\n%s" % line
                 except Nope:
                     break
                 except TooShort:
