@@ -213,8 +213,9 @@ class HaikuFinder:
                 try:
                     haikus.append(LineSyllablizer(line, self.unknown_word_handler).find_haiku())
                     break
-                except Nope:
+                except TypeError:
                     print "Type error from:\n%s" % line
+                    break
                 except Nope:
                     break
                 except TooShort:
