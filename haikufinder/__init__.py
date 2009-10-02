@@ -57,7 +57,7 @@ single_line_filters = [
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
    
-first_word_comma = re.compile(r'^\s*\w+,')
+first_word_comma = re.compile(r'^\s*[a-z]\w*,')
 
 with open(file('data/awkward_breaks'), 'r') as breaks:
     alts = '|'.join([r'\b%s\b' % ('\n'.join(e.strip().split())) for e in breaks.readlines() if len(e.strip()) > 0]
@@ -86,7 +86,7 @@ number_syllables = (
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
-                    2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
+                    3, 4, 4, 4, 4, 4, 4, 5, 4, 4,
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
                     )
@@ -118,6 +118,10 @@ class LineSyllablizer:
         "Raises KeyError, Nope"
         if not word or len(word) == 0:
             return 0
+        
+        if '-' in word:
+            return sum(self._count_syllables(w) for w in word.split('-'))
+        
         if not has_digit.search(word):
             return syllables[word]
         if too_many_digits.search(word):
@@ -137,7 +141,7 @@ class LineSyllablizer:
         count += self._count_chunk_syllables(word[start:])
         return count
     
-    def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
+    def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([-0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
             return None
@@ -231,4 +235,3 @@ def find_haikus(text,  unknown_word_handler=None):
 
 def count_syllables(text):
     return LineSyllablizer(text).count_syllables()
-
