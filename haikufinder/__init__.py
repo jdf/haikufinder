@@ -56,8 +56,6 @@ single_line_filters = [
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
    
-has_digit = re.compile(r'\d')
-
 first_word_comma = re.compile(r'^\s*\w+,')
 
 with open(file('data/awkward_breaks'), 'r') as breaks:
@@ -91,6 +89,7 @@ number_syllables = (
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
                     2, 3, 3, 3, 3, 3, 3, 4, 3, 3,
                     )
+has_digit = re.compile(r'\d')
 ordinal = re.compile(r'^(\d\d?)(?:rd|th|st)$', re.IGNORECASE)
 time = re.compile(r'^(\d\d?)[ap]m$', re.IGNORECASE)
 too_many_digits = re.compile('\d\d\d')
@@ -108,6 +107,12 @@ class LineSyllablizer:
         self.lines = []
         self.unknown_word_handler = unknown_word_handler
     
+    def _count_chunk_syllables(self, chunk):
+        if has_digit.search(chunk):
+            return number_syllables[int(chunk)]
+        else:
+            return syllables[chunk]
+        
     def _count_syllables(self, word, splitter=re.compile(r'(?<=\D)(?=\d)|(?<=\d)(?=\D)')):
         "Raises KeyError, Nope"
         if not has_digit.search(word):
@@ -124,10 +129,11 @@ class LineSyllablizer:
         start = 0
         for m in splitter.finditer(word):
             boundary = m.start()
-            count += syllables[word[start:boundary]]
+            count += self._count_chunk_syllables(word[start:boundary])
             start = boundary
-        count += syllables[word[start:]]
-        
+        count += self._count_chunk_syllables(word[start:])
+        return count
+    
     def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
@@ -222,3 +228,4 @@ def find_haikus(text,  unknown_word_handler=None):
 
 def count_syllables(text):
     return LineSyllablizer(text).count_syllables()
+
