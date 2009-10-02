@@ -53,6 +53,7 @@ single_line_filters = [
                        re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$', re.IGNORECASE),
                        re.compile(r'[.?!;:]+\s+[\'"]?[A-Za-z]+(?:\'[a-z]+)?$'),
                        re.compile(r'\d\d'),
+                       re.compile(r'\d(?!th)[a-z]', re.IGNORECASE),
                        ]
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
@@ -102,6 +103,7 @@ class LineSyllablizer:
         try:
             while syllable_count < n:
                 word = self.clean(self.words[self.index])
+                
                 syllable_count += syllables[word]
                 self.index += 1
         except KeyError:
@@ -164,3 +166,6 @@ class HaikuFinder:
     @classmethod
     def add_word(cls, word, syllable_count):
         syllables[word.upper()] = syllable_count
+
+def find_haikus(text,  unknown_word_handler=None):
+    return HaikuFinder(text, unknown_word_handler).find_haikus()
