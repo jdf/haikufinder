@@ -116,6 +116,8 @@ class LineSyllablizer:
         
     def _count_syllables(self, word, splitter=re.compile(r'(?<=\D)(?=\d)|(?<=\d)(?=\D)')):
         "Raises KeyError, Nope"
+        if not word or len(word) == 0:
+            return 0
         if not has_digit.search(word):
             return syllables[word]
         if too_many_digits.search(word):
@@ -212,9 +214,6 @@ class HaikuFinder:
                 line = "%s %s" % (line, self.lines[line_index + offset])
                 try:
                     haikus.append(LineSyllablizer(line, self.unknown_word_handler).find_haiku())
-                    break
-                except TypeError:
-                    print "Type error from:\n%s" % line
                     break
                 except Nope:
                     break
