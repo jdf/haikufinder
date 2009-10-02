@@ -53,7 +53,7 @@ single_line_filters = [
                        re.compile(r'^[a-z][^.?!;:]+([.?!;:]+[^.?!;:]+)+$', re.IGNORECASE),
                        re.compile(r'[.?!;:]+\s+[\'"]?[A-Za-z]+(?:\'[a-z]+)?$'),
                        re.compile(r'\d\d'),
-                       re.compile(r'\d(?!th)[a-z]', re.IGNORECASE),
+                       re.compile(r'\d(?!(th|st|rd)\b)[a-z]', re.IGNORECASE),
                        ]
 single_line_filters.append(re.compile(r'^(?:%s)\b'%read_alternates('starts')))
 single_line_filters.append(re.compile(r'\b(?:%s)$'%read_alternates('ends'), re.IGNORECASE))
