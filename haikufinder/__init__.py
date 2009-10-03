@@ -125,11 +125,8 @@ class LineSyllablizer:
         if not word or len(word) == 0:
             return 0
         
-        if '0' == word[0]:
-            if len(word) > 1:
-                return 1 + self._count_syllables(word[1:])  # oh seven
-            else:
-                return 1
+        if '0' == word[0] and len(word) > 1:
+            return 1 + self._count_syllables(word[1:])  # oh seven
         
         if '$' == word[0]:
             return 2 + self._count_syllables(word[1:]) # 13 dollars
@@ -152,7 +149,11 @@ class LineSyllablizer:
             return 2 + number_syllables[int(m.group(1))]
         m = time.match(word)
         if m:
-            partial = self._count_syllables(m.group(1)) + self._count_syllables(m.group(2))
+            if m.group(2) == '00':
+                minutes = 2
+            else:
+                minutes = number_syllables[int(m.group(2))]
+            partial = number_syllables[int(m.group(1))] + minutes
             if m.group(3):
                 return 2 + partial
             return partial
@@ -264,4 +265,3 @@ def find_haikus(text,  unknown_word_handler=None):
 def count_syllables(text):
     return LineSyllablizer(text).count_syllables()
 
-print count_syllables("$5.23")
