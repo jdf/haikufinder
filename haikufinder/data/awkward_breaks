@@ -56,4 +56,4 @@ santa (?:claus|rosa|ann?a|monica)
 came (?:by|to|for|with|upon)
 is \w+
 was \w+
-\w+ing\s\w+ (?with|to|at|for)
+\w+ing\s\w+ (?:with|to|at|for)
