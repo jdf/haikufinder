@@ -119,6 +119,9 @@ class LineSyllablizer:
         if not word or len(word) == 0:
             return 0
         
+        if '$' == word[0]:
+            return 2 + self._count_syllables(word[1:])
+        
         if '-' in word:
             return sum(self._count_syllables(w) for w in word.split('-'))
         
