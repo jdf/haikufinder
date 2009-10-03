@@ -119,8 +119,11 @@ class LineSyllablizer:
         if not word or len(word) == 0:
             return 0
         
+        if '0' == word[0]:
+            return 1 + self._count_syllables(word[1:])  # oh seven
+        
         if '$' == word[0]:
-            return 2 + self._count_syllables(word[1:])
+            return 2 + self._count_syllables(word[1:]) # 13 dollars
         
         if '-' in word:
             return sum(self._count_syllables(w) for w in word.split('-'))
