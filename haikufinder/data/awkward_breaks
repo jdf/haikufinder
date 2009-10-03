@@ -54,3 +54,5 @@ has got
 about to
 santa (?:claus|rosa|ann?a|monica)
 came (?:by|to|for|with|upon)
+is \w+
+was \w+
