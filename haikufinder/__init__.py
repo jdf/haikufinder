@@ -147,7 +147,7 @@ class LineSyllablizer:
         count += self._count_chunk_syllables(word[start:])
         return count
     
-    def clean(self, word, wp=re.compile(r'^[^a-z0-9]*([-_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
+    def clean(self, word, wp=re.compile(r'^[^a-z0-9\$]*(\$?[-_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
         m = wp.match(word)
         if not m:
             return None
