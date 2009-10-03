@@ -92,9 +92,15 @@ number_syllables = (
                     )
 has_digit = re.compile(r'\d')
 ordinal = re.compile(r'^(\d\d?)(?:rd|th|st)$', re.IGNORECASE)
-time = re.compile(r'^(\d\d?)[ap]m$', re.IGNORECASE)
 too_many_digits = re.compile('\d\d\d')
 
+short_time = re.compile(r'^([1-2]?[0-9])(?:[ap]m)$',re.IGNORECASE)
+time = re.compile(r'^([1-2]?[0-9]):(\d\d)([ap]m)?$',re.IGNORECASE)
+word_shapes = (
+               re.compile(r'^[^a-z0-9\$]*([-&_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE),
+               re.compile(r'^[^\$]*(\$\d+(?:\.\d{1,2})?)[^a-z0-9]*$', re.IGNORECASE),
+               re.compile(r'^[^a-z0-9]*([1-2]?[0-9]:\d\d(\s*[ap]m)?)[^a-z0-9]*$', re.IGNORECASE),
+               )
 class Nope(Exception):
     pass
 
@@ -119,8 +125,11 @@ class LineSyllablizer:
         if not word or len(word) == 0:
             return 0
         
-        if '0' == word[0] and len(word) > 1:
-            return 1 + self._count_syllables(word[1:])  # oh seven
+        if '0' == word[0]:
+            if len(word) > 1:
+                return 1 + self._count_syllables(word[1:])  # oh seven
+            else:
+                return 1
         
         if '$' == word[0]:
             return 2 + self._count_syllables(word[1:]) # 13 dollars
@@ -138,9 +147,15 @@ class LineSyllablizer:
             return syllables[word]
         if too_many_digits.search(word):
             raise Nope
-        m = time.match(word)
+        m = short_time.match(word)
         if m:
             return 2 + number_syllables[int(m.group(1))]
+        m = time.match(word)
+        if m:
+            partial = self._count_syllables(m.group(1)) + self._count_syllables(m.group(2))
+            if m.group(3):
+                return 2 + partial
+            return partial
         m = ordinal.match(word)
         if m:
             return number_syllables[int(m.group(1))]
@@ -153,11 +168,12 @@ class LineSyllablizer:
         count += self._count_chunk_syllables(word[start:])
         return count
     
-    def clean(self, word, wp=re.compile(r'^[^a-z0-9\$]*(\$?[-&_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE)):
-        m = wp.match(word)
-        if not m:
-            return None
-        return m.group(1).upper()
+    def clean(self, word):
+        for shape in word_shapes:
+            m = shape.match(word)
+            if m:
+                return m.group(1).upper()
+        return None
 
     def count_syllables(self):
         si = 0
@@ -248,3 +264,4 @@ def find_haikus(text,  unknown_word_handler=None):
 def count_syllables(text):
     return LineSyllablizer(text).count_syllables()
 
+print count_syllables("$5.23")
