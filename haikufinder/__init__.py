@@ -135,6 +135,9 @@ class LineSyllablizer:
         if '$' == word[0]:
             return 2 + self._count_syllables(word[1:]) # 13 dollars
         
+        if '@' == word[0]:
+            return 1 + self._count_syllables(word[1:]) # user name
+
         if '&' in word and len(word) > 1:
             return 1 + sum(self._count_syllables(w) for w in word.split('&'))
         
