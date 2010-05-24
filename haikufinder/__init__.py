@@ -126,6 +126,9 @@ class LineSyllablizer:
         if not word or len(word) == 0:
             return 0
         
+        if 'http:' in word:
+            return Nope
+
         if '0' == word[0] and len(word) > 1:
             return 1 + self._count_syllables(word[1:])  # oh seven
         
