@@ -97,7 +97,7 @@ too_many_digits = re.compile('\d\d\d')
 short_time = re.compile(r'^([1-2]?[0-9])(?:[ap]m)$',re.IGNORECASE)
 time = re.compile(r'^([1-2]?[0-9]):(\d\d)([ap]m)?$',re.IGNORECASE)
 word_shapes = (
-               re.compile(r'^[^a-z0-9\$]*([-&_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE),
+               re.compile(r'^[^a-z0-9\$@]*([-@&_0-9a-z\+]+(?:\'[a-z]+)?)[^a-z0-9]*$', re.IGNORECASE),
                re.compile(r'^[^\$]*(\$\d+(?:\.\d{1,2})?)[^a-z0-9]*$', re.IGNORECASE),
                re.compile(r'^[^a-z0-9]*([1-2]?[0-9]:\d\d(\s*[ap]m)?)[^a-z0-9]*$', re.IGNORECASE),
                )
