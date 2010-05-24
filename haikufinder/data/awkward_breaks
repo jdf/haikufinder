@@ -67,3 +67,4 @@ all (?:i|we|they|you|s?he)
 take \w+
 \w+ to
 lose weight
+don't w+
