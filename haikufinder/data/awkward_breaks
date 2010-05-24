@@ -56,3 +56,14 @@ santa (?:claus|rosa|ann?a|monica)
 came (?:by|to|for|with|upon)
 is \w+
 was \w+
+results? in
+keeps? (?:up|at|on)
+doubles? up
+sounds? good
+who (?:knew|knows)
+\d+ (?:hour|minute|day|year|month|second)s?
+full moon
+all (?:i|we|they|you|s?he)
+take \w+
+\w+ to
+lose weight

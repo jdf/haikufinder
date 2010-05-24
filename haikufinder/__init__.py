@@ -101,6 +101,7 @@ word_shapes = (
                re.compile(r'^[^\$]*(\$\d+(?:\.\d{1,2})?)[^a-z0-9]*$', re.IGNORECASE),
                re.compile(r'^[^a-z0-9]*([1-2]?[0-9]:\d\d(\s*[ap]m)?)[^a-z0-9]*$', re.IGNORECASE),
                )
+
 class Nope(Exception):
     pass
 
@@ -139,7 +140,7 @@ class LineSyllablizer:
         
         if '_' in word:
             return sum(self._count_syllables(w) for w in word.split('_'))
-
+        
         if not has_digit.search(word):
             return syllables[word]
         if too_many_digits.search(word):
