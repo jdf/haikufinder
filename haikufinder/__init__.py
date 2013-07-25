@@ -38,7 +38,7 @@
 from __future__ import with_statement
 import nltk
 import re
-import cPickle as pickle
+import pickle
 import gzip
 import os.path
 import sys
@@ -70,7 +70,7 @@ with open(file('data/awkward_breaks'), 'r') as breaks:
 with open(file('cmudict/cmudict.pickle'), 'rb') as p:
     syllables = pickle.load(p)
 with open(file('cmudict/custom.dict'), 'r') as p:
-    for line in p.xreadlines():
+    for line in p.readlines():
         (word, count) = line.split()
         syllables[word] = int(count)
 
@@ -190,10 +190,10 @@ class LineSyllablizer:
             for word in self.words:
                 syllable_count += self._count_syllables(self.clean(word))
         except KeyError:
-            print "I don't know '%s'"%word
+            print("I don't know '%s'"%word)
             return -1
         except Nope:
-            print "I can't do '%s'"%word
+            print("I can't do '%s'"%word)
             return -1
         return syllable_count
     

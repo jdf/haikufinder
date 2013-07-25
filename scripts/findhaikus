@@ -35,7 +35,7 @@ try:
 except:
     text = sys.stdin.read()
 for haiku in HaikuFinder(text).find_haikus():
-    print haiku[0]
-    print "    %s" % haiku[1]
-    print haiku[2]
-    print
+    print(haiku[0])
+    print("    %s" % haiku[1])
+    print(haiku[2])
+    print()
