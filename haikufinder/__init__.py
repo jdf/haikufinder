@@ -71,6 +71,8 @@ with open(file('cmudict/cmudict.pickle'), 'rb') as p:
     syllables = pickle.load(p)
 with open(file('cmudict/custom.dict'), 'r') as p:
     for line in p.readlines():
+    	if not len(line):
+    		continue
         (word, count) = line.split()
         syllables[word] = int(count)
 
