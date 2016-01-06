@@ -34,8 +34,8 @@ try:
     text = open(sys.argv[1], "r").read()
 except:
     text = sys.stdin.read()
-for haiku in HaikuFinder(text).find_haikus():
+for haiku in HaikuFinder(text.decode('utf-8')).find_haikus():
     print(haiku[0])
     print("    %s" % haiku[1])
     print(haiku[2])
-    print()
+    print("")
