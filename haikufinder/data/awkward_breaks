@@ -63,7 +63,7 @@ sounds? good
 who (?:knew|knows)
 \d+ (?:hour|minute|day|year|month|second)s?
 full moon
-all (?:i|we|they|you|s?he)
+all (?:i|we|they|you|s?he|the)
 take \w+
 \w+ to
 lose weight
